@@ -27,7 +27,6 @@ func (p *Problem) Index(index int64) revel.Result {
 	var problems []models.Problem
 	pagination := &Pagination{}
 	pagination.isValidPage(p.Validation, models.Problem{}, index)
-
 	if p.Validation.HasErrors() {
 		p.FlashParams()
 		p.Validation.Keep()

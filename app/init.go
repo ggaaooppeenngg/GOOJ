@@ -12,12 +12,12 @@ func init() {
 		revel.PanicFilter,             // Recover from panics and display an error page instead.
 		revel.RouterFilter,            // Use the routing table to select the right Action
 		revel.FilterConfiguringFilter, // A hook for adding or removing per-Action filters.
-		UrlPrinter,                    // Print request url
 		revel.ParamsFilter,            // Parse parameters into Controller.Params.
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
 		revel.I18nFilter,              // Resolve the requested language
+		UrlPrinter,                    // Print request url
 		HeaderFilter,                  // Add some security based headers
 		revel.InterceptorFilter,       // Run interceptors around the action.
 		revel.CompressFilter,          // Compress the result.
@@ -43,5 +43,6 @@ var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 
 var UrlPrinter = func(c *revel.Controller, fc []revel.Filter) {
 	fmt.Println(c.Request.Method, c.Request.URL.String())
+	c.Request.Locale = "en"
 	fc[0](c, fc[1:]) // Execute the next filter stage.
 }
