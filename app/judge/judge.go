@@ -14,7 +14,6 @@ import (
 	"github.com/ggaaooppeenngg/util"
 	"github.com/go-xorm/xorm"
 )
-
 var (
 	engine *xorm.Engine
 
@@ -44,7 +43,7 @@ func init() {
 
 //use command sed repleace SRCFILE to real source file
 func genDocFile(path string) error {
-	out, err := util.Run("sed", "s/SRCFILE/"+path+"/g", "Seedfile")
+	out, err := util.RunOutput("sed", "s/SRCFILE/"+path+"/g", "Seedfile")
 	if err != nil {
 		return err
 	}
@@ -57,7 +56,8 @@ func genDocFile(path string) error {
 
 //clean the container after running
 func removeContainer(name string) {
-	util.Run("docker", "rm", name)
+	cmd := exec.Command("docker","rm",name)
+	cmd.Run()
 }
 
 //user generated dockfile to build and run the test
