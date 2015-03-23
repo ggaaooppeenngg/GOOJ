@@ -64,11 +64,11 @@ func removeContainer(name string) {
 func test(path string) []byte {
 	defer removeContainer(path)
 	genDocFile(path)
-	_, err := util.Run("docker", "build", "-t", path, ".")
+	_, err := util.RunOutput("docker", "build", "-t", path, ".")
 	if err != nil {
 		fmt.Println(err)
 	}
-	out, err := util.Run("docker", "run", "-i", "--name="+path, imageName, "go", "run", "/home/main.go")
+	out, err := util.RunOutput("docker", "run", "-i", "--name="+path, imageName, "go", "run", "/home/main.go")
 	if err != nil {
 		fmt.Println(err)
 	}
