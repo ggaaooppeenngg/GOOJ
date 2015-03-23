@@ -2,9 +2,7 @@
 
 ###GET DEPENDENCIES
 
-```
-./get.sh
-```
+`go get github.com/ggaaooppeenngg/OJ`
 
 ###RUN PROJECT
 
@@ -27,7 +25,7 @@ go build -o judge/judge judge/judge.go
 
 ```
 
-###MAKE UBUNTU DOCKER IMAGE
+###RUN WITH DOCKER AS SANDBOX(not stable)
 
 ```
 
@@ -44,7 +42,7 @@ sudo tar -C raring -c . | sudo docker import - raring
 
 ```
 
-###SET UP SANDBOX FOR CODE TESIING
+####SET UP SANDBOX FOR CODE TESIING
 
 Sandbox is an independent package.
 
