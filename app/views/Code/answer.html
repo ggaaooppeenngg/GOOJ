@@ -14,18 +14,18 @@
 		<input name="problemId" type="hidden" value={{.problem.Id}}></input>
 	</div>
 	<div class="field">
-		<label>代码</label>
+		<label>{{msg . "code"}}</label>
 		<textarea name="code"></textarea>
 	</div>
 	<div class="field">
-		<label>语言</label>
+		<label>{{msg . "language"}}</label>
 		<select name="lang" class="ui button default small">
 			<option value="c">C</option>
 			<option value="cpp">CPP</option>
 			<option value="go">Go</option>
 		</select>	
 	</div>
-	<button type="submit" class="ui button blue">submit</button>
+	<button type="submit" class="ui button blue">{{msg . "submit"}}</button>
 </form>
 </div>
 </div>

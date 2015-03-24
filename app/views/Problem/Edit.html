@@ -3,40 +3,40 @@
 <div class="ui form segment">
 	<form method="POST"  action="/problem/edit" enctype="multipart/form-data">
 		<div class="field">
-			<label>Title</label>
+			<label>{{msg . "problem.Title"}}</label>
 			<input name="problem.Title" placeholder="Title" type="text" value="{{.problem.Title}}">
 		</div>
 		<div class="two fields">
 			<div class="field">
-				<label>Time Limit</label>
+				<label>{{msg . "problem.time"}} {{msg . "problem.limit"}}</label>
 				<input name="problem.TimeLimit" placeholder="Time Limit" type="text" value="{{.problem.TimeLimit}}">
 			</div>
 			<div class="field">
-				<label>Memory Limit</label>
+				<label>{{msg . "problem.memory"}} {{msg . "problem.limit"}}</label>
 				<input name="problem.MemoryLimit" placeholder="Memory Limit" type="text" value="{{.problem.MemoryLimit}}">
 			</div>
 		</div>
 		<div class="field">
-            <label>Description</label>
+			<label>{{msg . "problem.description"}}</label>
 			<textarea name="problem.Description">{{.problem.Description}}</textarea>
 		</div>
 		<div class="field">
-			<label>Input Sample</label>
+			<label>{{msg . "Input"}} {{msg . "Sample"}}</label>
 			<textarea name="problem.InputSample">{{.problem.InputSample}}</textarea>
 		</div>
 		<div class="field">
-			<label>Output Sample</label>
+			<label>{{msg . "Output"}} {{msg . "Sample"}}</label>
 			<textarea name="problem.OutputSample">{{.problem.OutputSample}}</textarea>
 		</div>
 		<div class="field">
-			<label>Change input File</label>
+			<label>{{msg . "Change"}} {{msg . "Input"}} {{msg . "File"}}</label>
 			<input name="inputTest" placeholder="input test file" type="file">
 		</div>
 		<div class="field">
-			<label>Change output File</label>
+			<label>{{msg . "Change"}} {{msg . "Output"}} {{msg . "File"}}</label>
 			<input name="outputTest" placeholder="output test file" type="file">
 		</div>
-		<button class="ui blue submit button">Submit</button>
+		<button class="ui blue submit button">{{msg . "Submit"}}</button>
 	</form>
 </div>
 {{template "footer.html" .}}

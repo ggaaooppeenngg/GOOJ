@@ -1,4 +1,3 @@
-[CN]
 problem=问题
 PROBLEM=问题
 SET=问题集
@@ -17,6 +16,7 @@ tests=测试
 login=登陆
 logout=登出
 submit=提交
+Submit=提交
 
 account.username=用户名
 account.email=邮箱
@@ -26,9 +26,30 @@ account.reset=重置
 account.forgot=忘记密码
 account.edit=编辑
 
-code=code
+code=代码
+language=语言
 
 register=注册
+register.name=用户名
+register.email=邮箱
+register.password=密码
+
+problem.Title=标题
+problem.time=时间
+problem.memory=内存
+problem.limit=限制
+problem.description=描述
+Sample=样例
+Input=输入
+Output=输出
+File=文件
+Change=更改
+TIME=时间
+MEMORY=内存
+LIMIT=限制
+edit=编辑
+delete=删除
+There is no post=没有提交
 
 status.when=提交时间
 status.who=用户
