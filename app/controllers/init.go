@@ -27,6 +27,7 @@ func GetStmp() SmtpConfig {
 func initTemplateFunc() {
 	revel.TemplateFuncs["isAdmin"] = IsAdmin
 	revel.TemplateFuncs["text"] = Text
+	revel.TemplateFuncs["searchResult"] = SearchResult
 }
 
 func initIntercepter() {

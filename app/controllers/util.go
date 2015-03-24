@@ -133,13 +133,20 @@ func (p *Pagination) Html() template.HTML {
 	return template.HTML(html)
 }
 
-/* replace \n with <p>*/
+// SearchResult replaces the text with key in red.
+func SearchResult(input, key string) template.HTML {
+	input = strings.Replace(input, key, "<span class=\"red\">"+key+"</span>", -1)
+	input = strings.Replace(input, "\n", "<br>", -1)
+	return template.HTML(input)
+}
+
+// replace \n with <p>
 func Text(input string) template.HTML {
 	//markdown class is used by marked.js to render markdown text
 	return template.HTML("<p class=\"markdown\">" + input + "</p>")
 }
 
-//checkout if user is admin
+// IsAdmin checkout if user is admin
 func IsAdmin(a interface{}) bool {
 	if a == nil {
 		return false
@@ -148,7 +155,7 @@ func IsAdmin(a interface{}) bool {
 	}
 }
 
-//search certain content
+// search certain content
 func Search(key string, c *revel.Controller) revel.Result {
 	var problems []models.Problem
 	err := engine.Where("title = ? ", key).Find(&problems)

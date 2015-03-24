@@ -29,6 +29,7 @@ GET     /problem/edit/:id                       Problem.Edit
 POST    /problem/edit                           Problem.PostEdit
 # Problem Index
 GET   	/problem/:id                            Problem.P
+GET     /problem/search/:key			Problem.Search
 # Account management
 
 

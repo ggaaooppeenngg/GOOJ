@@ -63,9 +63,7 @@ func (p *Problem) P(id int) revel.Result {
 		return p.Redirect("/")
 	}
 	var prob models.Problem
-	has, err := engine.
-		Id(id).
-		Get(&prob)
+	has, err := engine.Id(id).Get(&prob)
 
 	if err != nil || !has || !prob.IsValid {
 		log.Println(err)
@@ -78,7 +76,7 @@ func (p *Problem) P(id int) revel.Result {
 	return p.Render(prob, moreScripts)
 }
 
-//POST /problem/new
+// POST /problem/new
 func (p *Problem) PostNew(problem models.Problem,
 	inputTest, outputTest []byte) revel.Result {
 
@@ -121,8 +119,8 @@ func (p *Problem) PostNew(problem models.Problem,
 	return p.Redirect("/")
 }
 
-//list unchecked users' problem posts
-//GET /problem/posts/p/:index
+// list unchecked users' problem posts
+// GET /problem/posts/p/:index
 func (p *Problem) Posts(index int64) revel.Result {
 	var problems []models.Problem
 	pagination := &Pagination{}
@@ -148,7 +146,7 @@ func (p *Problem) Posts(index int64) revel.Result {
 	return p.Render(problems)
 }
 
-//GET /problem/admin/:id , make problem valid
+// GET /problem/admin/:id , make problem valid
 func (p *Problem) Admit(id int64) revel.Result {
 	problem := &models.Problem{Id: id}
 	problem.IsValid = true
@@ -230,4 +228,21 @@ func (p *Problem) PostEdit(problem models.Problem,
 		log.Println(err)
 	}
 	return p.Redirect("/")
+}
+
+// GET /probelm/search/:key
+func (p *Problem) Search(key string) revel.Result {
+	var (
+		probs []models.Problem
+		res   = make(map[string]interface{})
+	)
+	fmt.Println(key)
+	err := engine.Where("description LIKE $1 OR title LIKE $1 ", "%"+key+"%").Find(&probs)
+	if err != nil {
+		res["error"] = err.Error()
+	} else {
+		res["probs"] = probs
+		res["key"] = key
+	}
+	return p.Render(res)
 }
