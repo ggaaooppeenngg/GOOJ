@@ -104,8 +104,6 @@ func (c *Code) Status(index int64) revel.Result {
 	return c.Render(moreStyles, moreScripts, sources, pagination)
 }
 
-//json render
-
 //get source code
 func (c *Code) View(id int64) revel.Result {
 	s := models.Source{}

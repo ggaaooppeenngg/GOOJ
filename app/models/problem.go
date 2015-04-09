@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/ggaaooppeenngg/md2txt"
 	"github.com/ggaaooppeenngg/util"
 
 	"code.google.com/p/go-uuid/uuid"
@@ -42,6 +43,11 @@ func (p *Problem) Validate(v *revel.Validation, in, out []byte) {
 	p.OutputTestPath = path + "/outputTest"
 }
 
+// return pure text content of description.
+func (p *Problem) Text() string {
+	out := md2txt.Parse([]byte(p.Description), md2txt.BASIC)
+	return string(out)
+}
 func (p *Problem) Delete() error {
 	_, err := engine.Id(p.Id).Delete(new(Problem))
 	if err != nil {
