@@ -6,39 +6,25 @@
 
 ###RUN PROJECT
 
-modify **conf/app.conf** and **conf/misc.conf** to adapt to your enviroment.
+Modify **conf/app.conf** and **conf/misc.conf** to adapt to your enviroment.
+
+This includes two parts, one is web server, another is judger,
+judger scans database to process unhandled submits.
 
 To run the server:
 
 ```
 
-revel run github.com/ggaaooppeenngg/OJ prod
+revel run github.com/ggaaooppeenngg/OJ 
 
 ```
 
-To run the judge:
+To run the judger:
 
 ```
 go build -o judge/judge judge/judge.go
 
 ./judge/judge
-
-```
-
-###RUN WITH DOCKER AS SANDBOX(not stable)
-
-```
-
-//get debootstrap 
-sudo apt-get install debootstrap`
-//get shell to install ubuntu
-wget https://raw.githubusercontent.com/dotcloud/docker/master/contrib/mkimage/debootstrap
-
-chmod +x debootstrap
-
-sudo ./debootstrap raring raring 
-
-sudo tar -C raring -c . | sudo docker import - raring
 
 ```
 
@@ -53,5 +39,5 @@ go install github.com/ggaaooppeenngg/sandbox
 
 ```
 
-For more details,see [here](http://github.com/ggaaooppeenngg/sandbox)
+For more details, see [here](http://github.com/ggaaooppeenngg/sandbox)
 
