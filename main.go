@@ -79,12 +79,21 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		if err := code.Init(); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
 		if errs := validator.Validate(code); errs != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": errs})
 			return
 		}
 		if _, err := engine.InsertOne(&code); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		if err := SaveFile(code.SourcePath(), code.Source); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"id": code.Id})

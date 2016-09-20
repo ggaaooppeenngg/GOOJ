@@ -11,7 +11,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/go-xorm/xorm"
+	_ "github.com/lib/pq"
 
+	"github.com/ggaaooppeenngg/OJ/loghook"
 	"github.com/ggaaooppeenngg/OJ/model"
 )
 
@@ -25,6 +27,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	log.AddHook(loghook.NewCallerHook())
 }
 
 type result struct {
@@ -115,7 +118,7 @@ func judgeCode(codeChan <-chan model.Code) {
 				return
 			}
 			cmd := exec.Command("sandbox",
-				fmt.Sprintf("--lang=%s", code.Lang),
+				fmt.Sprintf("--lang=%s", strings.ToLower(code.Language.String())),
 				fmt.Sprintf("--time=%d", problem.TimeLimit),
 				fmt.Sprintf("--memory=%d", problem.MemoryLimit),
 				"--compile",
@@ -126,7 +129,10 @@ func judgeCode(codeChan <-chan model.Code) {
 			)
 			out, err := cmd.CombinedOutput()
 			if err != nil {
-				log.Error(err)
+				log.WithFields(log.Fields{
+					"command": strings.Join(cmd.Args, " "),
+					"output":  string(out),
+				}).Error(err)
 				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Unhandled})
 				if err != nil {
 					log.Error(err)
