@@ -1,1 +1,2 @@
 web: OJ
+worker: judger

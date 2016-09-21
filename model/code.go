@@ -68,6 +68,7 @@ func (c *Code) Init() error {
 	default:
 		return fmt.Errorf("unknown or unspported language %s", c.Language)
 	}
+	c.CreatedAt = time.Now()
 	return nil
 }
 

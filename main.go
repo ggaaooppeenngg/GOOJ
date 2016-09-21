@@ -10,7 +10,6 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/ggaaooppeenngg/OJ/model"
-
 	"github.com/ggaaooppeenngg/validator"
 )
 

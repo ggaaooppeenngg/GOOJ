@@ -1,11 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
-	"regexp"
-	"strconv"
 	"strings"
 	"time"
 
@@ -21,6 +20,8 @@ var (
 	engine *xorm.Engine
 )
 
+type M log.Fields
+
 func init() {
 	var err error
 	engine, err = xorm.NewEngine("postgres", os.Getenv("DATABASE_URL"))
@@ -30,7 +31,8 @@ func init() {
 	log.AddHook(loghook.NewCallerHook())
 }
 
-type result struct {
+type Result struct {
+	StatusLit   string `json:"status"`
 	Status      model.JudgeResult
 	Time        int64
 	Memory      int64
@@ -63,44 +65,24 @@ func getUnhandledCode() <-chan model.Code {
 	}()
 	return unHandledCodeChan
 }
-func convResult(out []byte) *result {
-	results := strings.Split(fmt.Sprintf("%s", out), ":")
-	statuss := results[0]
-	var (
-		status              model.JudgeResult
-		wrongAnswer         string
-		memory, time, nth64 int64
-	)
-	if len(results) > 1 {
-		memory, _ = strconv.ParseInt(results[1], 0, 64)
-	}
-	if len(results) > 2 {
-		time, _ = strconv.ParseInt(results[2], 0, 64)
-	}
-	if len(results) > 3 {
-		nth64, _ = strconv.ParseInt(results[3], 0, 64)
-	}
-	switch statuss {
+
+func (r *Result) Init() {
+	switch r.StatusLit {
 	case "AC":
-		status = model.Accept
+		r.Status = model.Accept
 	case "CE":
-		status = model.CompileError
+		r.Status = model.CompileError
 	case "TL":
-		status = model.TimeLimitExceeded
+		r.Status = model.TimeLimitExceeded
 	case "ML":
-		status = model.MemoryLimitExceeded
+		r.Status = model.MemoryLimitExceeded
 	case "RE":
-		status = model.RuntimeError
+		r.Status = model.RuntimeError
 	case "FE":
-		status = model.PresentationError
+		r.Status = model.PresentationError
 	case "WA":
-		status = model.WrongAnswer
-		if len(results) > 4 {
-			wrongAnswer = results[4]
-		}
-		nth64 += 1
+		r.Status = model.WrongAnswer
 	}
-	return &result{Status: status, Time: time, Memory: memory, Nth: int(nth64), WrongAnswer: wrongAnswer}
 }
 
 func judgeCode(codeChan <-chan model.Code) {
@@ -139,11 +121,11 @@ func judgeCode(codeChan <-chan model.Code) {
 				}
 				return
 			}
-			var rslt *result
+			var rslt Result
 			// panic output
-			if !regexp.MustCompile(`\w\w:\d+:\d+:([\s\S]*)`).Match(out) {
-				rslt = &result{Status: model.PanicError, PanicOutput: fmt.Sprintf("%s", out)}
-				log.WithField("code", code).
+			if err := json.Unmarshal(out, &rslt); err != nil {
+				rslt = Result{Status: model.PanicError, PanicOutput: fmt.Sprintf("%s", out)}
+				log.WithFields(log.Fields{"code": code}).
 					Errorf("exception out %s", out)
 				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Unhandled})
 				if err != nil {
@@ -151,7 +133,7 @@ func judgeCode(codeChan <-chan model.Code) {
 				}
 				return
 			}
-			rslt = convResult(out)
+			rslt.Init()
 			transaction := engine.NewSession()
 			defer transaction.Close()
 			err = transaction.Begin()
