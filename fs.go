@@ -1,20 +1,59 @@
 package main
 
 import (
+	"fmt"
 	"io"
-	"io/ioutil"
-	"os"
+	"net/http"
+	"strings"
+
+	"qiniupkg.com/api.v7/conf"
+	"qiniupkg.com/api.v7/kodo"
+	"qiniupkg.com/api.v7/kodocli"
 )
 
+var bucket string
+var domain string
+
+func init() {
+
+	conf.ACCESS_KEY = "oG9P9Gqe165Gn08DElVWfP13rLNihJt8R_X8auu9"
+	conf.SECRET_KEY = "7ZsEnnLQTdDQbBMfbgnJIkpEUBcYqwEqGimdA68q"
+	bucket = "oj-bucket"
+	domain = "oeonl9t1t.bkt.clouddn.com"
+
+}
+
+//构造返回值字段
+type PutRet struct {
+	Hash string `json:"hash"`
+	Key  string `json:"key"`
+}
+
 func SaveFile(key string, content string) error {
-	return ioutil.WriteFile(key, []byte(content), 0644)
+	c := kodo.New(0, nil)
+	policy := &kodo.PutPolicy{
+		Scope: bucket,
+	}
+	var ret PutRet
+	token := c.MakeUptoken(policy)
+	uploader := kodocli.NewUploader(0, nil)
+	err := uploader.Put(nil, &ret, token, key, strings.NewReader(content), int64(len(content)), nil)
+	if err != nil {
+		return err
+	}
+	fmt.Println(ret)
+	return nil
 }
 
 // GetFIle gets a file, it is the caller's reponsibility to close file.
 func GetFile(key string) (io.ReadCloser, error) {
-	f, err := os.Open(key)
+	baseUrl := kodo.MakeBaseUrl(domain, key) // 得到下载 url
+	resp, err := http.Get(baseUrl)
 	if err != nil {
 		return nil, err
 	}
-	return f, nil
+	if resp.StatusCode/100 != 2 {
+		return nil, fmt.Errorf("Status code %d", resp.StatusCode)
+	}
+	return resp.Body, nil
 }
