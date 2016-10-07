@@ -11,15 +11,17 @@ import (
 	"qiniupkg.com/api.v7/kodocli"
 )
 
-var bucket string
-var domain string
+var (
+	bucket string
+	domain string
+)
 
 func init() {
 
-	conf.ACCESS_KEY = "oG9P9Gqe165Gn08DElVWfP13rLNihJt8R_X8auu9"
-	conf.SECRET_KEY = "7ZsEnnLQTdDQbBMfbgnJIkpEUBcYqwEqGimdA68q"
-	bucket = "oj-bucket"
-	domain = "oeonl9t1t.bkt.clouddn.com"
+	conf.ACCESS_KEY = os.Getenv("QINIU_ACCESS_KEY")
+	conf.SECRET_KEY = os.Getenv("QINIU_SECRET_KEY")
+	bucket = os.Getenv("QINIU_BUCKET")
+	domain = os.Getenv("QINIU_DOMAIN")
 
 }
 
