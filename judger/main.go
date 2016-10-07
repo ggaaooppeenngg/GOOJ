@@ -28,15 +28,21 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	engine.ShowSQL(true)
 	log.AddHook(loghook.NewCallerHook())
+	log.SetLevel(log.DebugLevel)
 }
 
 type Result struct {
-	StatusLit   string `json:"status"`
-	Status      model.JudgeResult
-	Time        int64
-	Memory      int64
-	Nth         int
+	Status    model.JudgeResult `json:"-"` // sandbox result status
+	StatusLit string            `json:"Status"`
+	Error     string            //
+	Memory    int64             // KB
+	Time      int64             // MS
+	Nth       int
+	Output    string // output
+	StdOutput string // wanted output
+
 	WrongAnswer string
 	PanicOutput string // exception output
 }
@@ -48,16 +54,16 @@ func getUnhandledCode() <-chan model.Code {
 		for {
 			var codes []model.Code
 			err := engine.Where("status = ?", model.Unhandled).Find(&codes)
-
 			if err != nil {
 				log.Error(err)
 			}
 			for _, code := range codes {
-				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Handling})
+				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Handling, Version: code.Version})
 				if err != nil {
 					log.Error(err)
 					continue
 				}
+				log.Debug("Update set handling")
 				unHandledCodeChan <- code
 			}
 			time.Sleep(time.Second)
@@ -93,7 +99,7 @@ func judgeCode(codeChan <-chan model.Code) {
 			var problem model.Problem
 			if _, err := engine.Id(code.ProblemId).Get(&problem); err != nil {
 				log.Error(err)
-				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Unhandled})
+				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.RuntimeError, Version: code.Version})
 				if err != nil {
 					log.Error(err)
 				}
@@ -115,19 +121,18 @@ func judgeCode(codeChan <-chan model.Code) {
 					"command": strings.Join(cmd.Args, " "),
 					"output":  string(out),
 				}).Error(err)
-				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Unhandled})
+				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.RuntimeError, Version: code.Version})
 				if err != nil {
 					log.Error(err)
 				}
 				return
 			}
 			var rslt Result
-			// panic output
 			if err := json.Unmarshal(out, &rslt); err != nil {
 				rslt = Result{Status: model.PanicError, PanicOutput: fmt.Sprintf("%s", out)}
 				log.WithFields(log.Fields{"code": code}).
 					Errorf("exception out %s", out)
-				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.Unhandled})
+				_, err = engine.Id(code.Id).Cols("status").Update(&model.Code{Status: model.RuntimeError, Version: code.Version})
 				if err != nil {
 					log.Error(err)
 				}
@@ -147,6 +152,7 @@ func judgeCode(codeChan <-chan model.Code) {
 				Memory:      rslt.Memory,
 				Nth:         rslt.Nth,
 				WrongAnswer: rslt.WrongAnswer,
+				Version:     code.Version,
 			}); err != nil {
 				log.Error(err)
 				err = transaction.Rollback()
