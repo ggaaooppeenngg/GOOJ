@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/ggaaooppeenngg/OJ)](https://goreportcard.com/report/github.com/ggaaooppeenngg/OJ)
+
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 #OJ
