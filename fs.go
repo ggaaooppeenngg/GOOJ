@@ -26,7 +26,7 @@ func init() {
 
 }
 
-//构造返回值字段
+// ret type
 type PutRet struct {
 	Hash string `json:"hash"`
 	Key  string `json:"key"`
@@ -50,7 +50,7 @@ func SaveFile(key string, content string) error {
 
 // GetFIle gets a file, it is the caller's reponsibility to close file.
 func GetFile(key string) (io.ReadCloser, error) {
-	baseUrl := kodo.MakeBaseUrl(domain, key) // 得到下载 url
+	baseUrl := kodo.MakeBaseUrl(domain, key) // download url
 	resp, err := http.Get(baseUrl)
 	if err != nil {
 		return nil, err

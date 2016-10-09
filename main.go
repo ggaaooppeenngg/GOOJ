@@ -17,7 +17,7 @@ import (
 
 var engine *xorm.Engine
 
-func init() {
+func main() {
 	var err error
 	engine, err = xorm.NewEngine("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
@@ -26,11 +26,6 @@ func init() {
 	if err := engine.Sync2(new(model.Problem), new(model.Code)); err != nil {
 		panic(err)
 	}
-
-}
-
-func main() {
-
 	r := gin.New()
 	r.Use(cors.Middleware(cors.Config{
 		Origins:         "*",

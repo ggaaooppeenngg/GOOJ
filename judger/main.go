@@ -22,17 +22,6 @@ var (
 
 type M log.Fields
 
-func init() {
-	var err error
-	engine, err = xorm.NewEngine("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		panic(err)
-	}
-	engine.ShowSQL(true)
-	log.AddHook(loghook.NewCallerHook())
-	log.SetLevel(log.DebugLevel)
-}
-
 type Result struct {
 	Status    model.JudgeResult `json:"-"` // sandbox result status
 	StatusLit string            `json:"Status"`
@@ -180,6 +169,15 @@ func judgeCode(codeChan <-chan model.Code) {
 }
 
 func main() {
+	var err error
+	engine, err = xorm.NewEngine("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		panic(err)
+	}
+	engine.ShowSQL(true)
+	log.AddHook(loghook.NewCallerHook())
+	log.SetLevel(log.DebugLevel)
+
 	codeChan := getUnhandledCode()
 	judgeCode(codeChan)
 }
