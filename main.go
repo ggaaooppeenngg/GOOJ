@@ -3,8 +3,10 @@ package main
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 
 	"github.com/go-xorm/xorm"
 	_ "github.com/lib/pq"
@@ -29,7 +31,16 @@ func init() {
 
 func main() {
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     true,
+		ValidateHeaders: false,
+	}))
 
 	// Add a new problem in problem set
 	r.POST("/problem", func(c *gin.Context) {

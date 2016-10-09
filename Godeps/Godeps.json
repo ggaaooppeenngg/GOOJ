@@ -4,7 +4,7 @@
 	"GodepVersion": "v74",
 	"Packages": [
 		"./...",
-		"github.com/ggaaooppeenngg/libsandbox/..."
+		"github.com/ggaaooppeenngg/libsandbox/sandbox"
 	],
 	"Deps": [
 		{
@@ -56,6 +56,11 @@
 		{
 			"ImportPath": "github.com/golang/protobuf/proto",
 			"Rev": "1f49d83d9aa00e6ce4fc8258c71cc7786aec968a"
+		},
+		{
+			"ImportPath": "github.com/itsjamie/gin-cors",
+			"Comment": "1.0.0",
+			"Rev": "97b4a9da79331dfa2b6d35f4cdd1e50f5148859c"
 		},
 		{
 			"ImportPath": "github.com/lib/pq",
