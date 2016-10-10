@@ -3,7 +3,16 @@ language: go
 go:
   - tip
 
+env:
+  - DATABASE_URL="postgres:///travis_ci_test?sslmode=disable"
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
 before_install:
+
   - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
   - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi

@@ -33,6 +33,12 @@ type PutRet struct {
 }
 
 func SaveFile(key string, content string) error {
+	// This a a workaround, for test should not write real file
+	// TODO: abstract fs interface
+
+	if inTest {
+		return nil
+	}
 	c := kodo.New(0, nil)
 	policy := &kodo.PutPolicy{
 		Scope: bucket,
@@ -44,7 +50,6 @@ func SaveFile(key string, content string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(ret)
 	return nil
 }
 

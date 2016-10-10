@@ -42,7 +42,7 @@ const (
 
 // code is a resolution to some problem
 type Code struct {
-	Id          int64       `json:"-"`
+	Id          int64       `json:"id"`
 	ProblemId   int64       `json:"problemId" validate:"nonzero"`
 	CreatedAt   time.Time   `json:"-"`
 	Status      JudgeResult `json:"-"`
