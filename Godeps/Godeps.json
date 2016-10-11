@@ -4,7 +4,7 @@
 	"GodepVersion": "v74",
 	"Packages": [
 		"./...",
-		"github.com/ggaaooppeenngg/libsandbox/sandbox"
+		"github.com/ggaaooppeenngg/libsandbox/..."
 	],
 	"Deps": [
 		{

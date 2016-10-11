@@ -6,7 +6,7 @@ import (
 
 // Problem is a model of problem.
 type Problem struct {
-	Id           int64  ``                                                                 // primary key
+	Id           int64  `json:"id"`                                                        // primary key
 	Title        string `validate:"nonzero"       json:"title"`                            // problem title
 	Solved       int64  ``                                                                 // times of accepted submit
 	TimeLimit    int64  `validate:"nonzero,min=1" json:"timeLimit"`                        // time limit in ms
