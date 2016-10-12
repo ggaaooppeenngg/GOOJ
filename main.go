@@ -91,7 +91,7 @@ func NewEngine() *gin.Engine {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := engine.Limit(req.Limit, req.Start).Find(&problems); err != nil {
+		if err := engine.Desc("created_at").Limit(req.Limit, req.Start).Find(&problems); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -159,7 +159,7 @@ func NewEngine() *gin.Engine {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		if err := engine.Limit(req.Limit, req.Start).Find(&codes); err != nil {
+		if err := engine.Desc("created_at").Limit(req.Limit, req.Start).Find(&codes); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}

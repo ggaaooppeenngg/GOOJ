@@ -4,9 +4,9 @@ package model
 
 import "fmt"
 
-const _JudgeResult_name = "AcceptCompileErrorWrongAnswerTimeLimitExceededMemoryLimitExceededUnhandledHandlingRuntimeErrorPresentationErrorPanicError"
+const _JudgeResult_name = "UnhandledAcceptCompileErrorWrongAnswerTimeLimitExceededMemoryLimitExceededHandlingRuntimeErrorPresentationErrorPanicError"
 
-var _JudgeResult_index = [...]uint8{0, 6, 18, 29, 46, 65, 74, 82, 94, 111, 121}
+var _JudgeResult_index = [...]uint8{0, 9, 15, 27, 38, 55, 74, 82, 94, 111, 121}
 
 func (i JudgeResult) String() string {
 	if i < 0 || i >= JudgeResult(len(_JudgeResult_index)-1) {

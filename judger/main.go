@@ -174,7 +174,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	engine.ShowSQL(true)
+	engine.ShowSQL(os.Getenv("XORM_SHOW_SQL") == "true")
 	log.AddHook(loghook.NewCallerHook())
 	log.SetLevel(log.DebugLevel)
 

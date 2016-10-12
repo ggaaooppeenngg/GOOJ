@@ -18,7 +18,6 @@ var (
 )
 
 func init() {
-
 	conf.ACCESS_KEY = os.Getenv("QINIU_ACCESS_KEY")
 	conf.SECRET_KEY = os.Getenv("QINIU_SECRET_KEY")
 	bucket = os.Getenv("QINIU_BUCKET")
