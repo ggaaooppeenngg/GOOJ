@@ -10,7 +10,7 @@ var _Language_index = [...]uint8{0, 2, 3, 6}
 
 func (i Language) String() string {
 	if i < 0 || i >= Language(len(_Language_index)-1) {
-		return fmt.Sprintf("%d", i)
+		return fmt.Sprintf("Language(%d)", i)
 	}
 	return _Language_name[_Language_index[i]:_Language_index[i+1]]
 }
